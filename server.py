@@ -8,6 +8,9 @@ app = Flask(__name__)
 app.secret_key = 'terrible secret key' # Needed for using sessions
 
 num_proc = 0
+user_util = 0
+system_util = 0
+idle_util = 0
 
 GCP_STATUS_URL = 'https://status.cloud.google.com/incidents.json'
 AWS_STATUS_URL = ''
@@ -45,10 +48,19 @@ def processes_page():
     print('Number processes: %d' % num_proc)
     return ''
 
+@app.route('/utilization/send', methods = ['POST'])
+def utilization_page():
+    global user_util, system_util, idle_util
+    user_util = int(request.form['user_util'])
+    system_util = int(request.form['system_util'])
+    idle_util = int(request.form['idle_util'])
+    print('%% user utilizations: %d\n%% system utilization: %d\n%% idle utilization: %d' % (user_util, system_util, idle_util))
+    return ''
+
 @app.route('/processes')
 def processes_dashboard():
-    global num_proc
-    return 'Client currently has %d processes running' % num_proc
+    global num_proc, user_util, system_util, idle_util
+    return 'Client currently has %d processes running<br>%% user utilizations: %d<br>%% system utilization: %d<br>%% idle utilization: %d' % (num_proc, user_util, system_util, idle_util)
 
 @app.route('/')
 def dashboard():

@@ -33,3 +33,4 @@ print(info.get_utilization())
 
 logs = LogInfo(config)
 print(logs.get_log_file())
+print(logs.get_file_tree())

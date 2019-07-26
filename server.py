@@ -11,6 +11,7 @@ num_proc = 0
 user_util = 0
 system_util = 0
 idle_util = 0
+dir_tree = ''
 logs_array = {}
 
 GCP_STATUS_URL = 'https://status.cloud.google.com/incidents.json'
@@ -69,6 +70,12 @@ def logs_page():
         logs_array[log_path] = log_text
     return ''
 
+@app.route('/tree/send', methods = ['POST'])
+def tree_page():
+    global dir_tree
+    dir_tree = request.form['tree']
+    return ''
+
 @app.route('/dashboard')
 def processes_dashboard():
     global num_proc, user_util, system_util, idle_util
@@ -85,6 +92,11 @@ def logs_dashboard():
     else:
         logs_page = 'No Logs have been received'
     return append_main_menu_button(logs_page)
+
+@app.route('/tree')
+def tree_dashboard():
+    global dir_tree
+    return dir_tree
 
 @app.route('/')
 def dashboard():

@@ -4,6 +4,9 @@ import requests
 
 class ProcInfo:
 
+    def __init__(self, config):
+        self.config = config
+
     def get_num_proc(self):
         # For Mac/FreeBSD only probably, one sample and no columns to only get global info
         proc = subprocess.Popen(['top','-l','1','-n','0'], stdout=subprocess.PIPE)

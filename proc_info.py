@@ -2,10 +2,12 @@ import subprocess
 import re
 import requests
 
-class ProcInfo:
+from probe import Probe
+
+class ProcInfo(Probe):
 
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def get_num_proc(self):
         # For Mac/FreeBSD only probably, one sample and no columns to only get global info
@@ -16,8 +18,7 @@ class ProcInfo:
         num_processes_string = pattern.search(top_output)
         # Take the result (we should check we have one) and then split it at the space
         num_processes, total_string = num_processes_string.group().split(' ')
-        r = requests.post(url = self.config['target'] + '/processes/send', data = { 'num_proc': num_processes } )
-        return num_processes
+        r = requests.post(url = self.target + '/processes/send', data = { 'num_proc': num_processes } )
 
     def get_utilization(self):
         proc = subprocess.Popen(['top','-l','1','-n','0'], stdout=subprocess.PIPE)
@@ -36,5 +37,4 @@ class ProcInfo:
         idle_utilization, total_string = idle_utilization_string.group().split('%')
 
         util_info = { 'user_util': user_utilization, 'system_util': system_utilization, 'idle_util': idle_utilization }
-        r = requests.post(url = self.config['target'] + '/utilization/send', data = util_info )
-        return [ user_utilization, system_utilization, idle_utilization ]
+        r = requests.post(url = self.target + '/utilization/send', data = util_info )

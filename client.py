@@ -28,10 +28,11 @@ args = parser.parse_args()
 
 config = parse_config_json(args.config)
 
+# TODO: Need to figure out a systematic way to generate the correct probes based on the config
 info = ProcInfo(config)
-print(info.get_num_proc())
-print(info.get_utilization())
+info.get_num_proc()
+info.get_utilization()
 
 logs = LogInfo(config)
-print(logs.get_log_file())
-print(logs.get_file_tree())
+logs.get_log_file()
+logs.get_file_tree()

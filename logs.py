@@ -1,10 +1,12 @@
 import os
 import requests
 
-class LogInfo:
+from probe import Probe
+
+class LogInfo(Probe):
 
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def get_log_file(self):
         if 'send_logs' in self.config:
@@ -16,9 +18,7 @@ class LogInfo:
                         logs_data[log_path] = log_text
                 except:
                     logs_data[log_path] = '<font color="red">ERROR: The client failed to open the file "%s"</font>' % log_path
-                r = requests.post(url = self.config['target'] + '/logs/send', data = logs_data)
-            return logs_data
-        return None
+                r = requests.post(url = self.target + '/logs/send', data = logs_data)
         
     def get_file_tree(self):
         # TODO: I don't like the way this is packaged and sent
@@ -29,6 +29,5 @@ class LogInfo:
             tree += ('<span style="margin-left:%dem">' % current_depth) + path + '<br>'
             for f in files:
                 tree += ('<span style="margin-left:%dem">' % (current_depth + 1)) + f + '<br>'
-        r = requests.post(url = self.config['target'] + '/tree/send', data = { 'tree' : tree })
-        return tree
+        r = requests.post(url = self.target + '/tree/send', data = { 'tree' : tree })
                 

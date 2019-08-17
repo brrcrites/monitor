@@ -16,7 +16,7 @@ class LogInfo:
                         logs_data[log_path] = log_text
                 except:
                     logs_data[log_path] = '<font color="red">ERROR: The client failed to open the file "%s"</font>' % log_path
-                r = requests.post(url = 'http://127.0.0.1:5000/logs/send', data = logs_data)
+                r = requests.post(url = self.config['target'] + '/logs/send', data = logs_data)
             return logs_data
         return None
         
@@ -29,6 +29,6 @@ class LogInfo:
             tree += ('<span style="margin-left:%dem">' % current_depth) + path + '<br>'
             for f in files:
                 tree += ('<span style="margin-left:%dem">' % (current_depth + 1)) + f + '<br>'
-        r = requests.post(url = 'http://127.0.0.1:5000/tree/send', data = { 'tree' : tree })
+        r = requests.post(url = self.config['target'] + '/tree/send', data = { 'tree' : tree })
         return tree
                 

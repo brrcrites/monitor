@@ -8,6 +8,7 @@ from proc_info import ProcInfo
 from logs import LogInfo
 
 def parse_config_json(config_location):
+    # TODO: validate the input config against a schema
     try:
         fd = open(config_location,'r')
         file_str = fd.read()

@@ -4,7 +4,7 @@ import requests
 import json
 import argparse
 
-from proc_info import ProcInfo
+from proc import ProcInfo
 from logs import LogInfo
 
 def parse_config_json(config_location):

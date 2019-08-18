@@ -1,6 +1,7 @@
 import subprocess
 import re
 import requests
+import logging
 
 from probe import Probe
 
@@ -19,6 +20,7 @@ class ProcInfo(Probe):
         # Take the result (we should check we have one) and then split it at the space
         num_processes, total_string = num_processes_string.group().split(' ')
         r = requests.post(url = self.target + '/processes/send', data = { 'num_proc': num_processes } )
+        logging.info(f'Sent number of processes {num_processes} to the server endpoing located at {self.target}')
 
     def get_utilization(self):
         proc = subprocess.Popen(['top','-l','1','-n','0'], stdout=subprocess.PIPE)
@@ -38,3 +40,4 @@ class ProcInfo(Probe):
 
         util_info = { 'user_util': user_utilization, 'system_util': system_utilization, 'idle_util': idle_utilization }
         r = requests.post(url = self.target + '/utilization/send', data = util_info )
+        logging.info(f'Sent the utilization values {user_utilization} (user), {system_utilization} (system), {idle_utilization} (idle) to the server endpoing located at {self.target}')

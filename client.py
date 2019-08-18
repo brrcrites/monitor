@@ -3,6 +3,7 @@ import re
 import requests
 import json
 import argparse
+import logging
 
 from proc import ProcInfo
 from logs import LogInfo
@@ -20,6 +21,10 @@ def parse_config_json(config_location):
     except:
         print('The config file located at "%s" failed to parse as valid JSON' % config_location)
         exit(-1) # TODO: raise an exception here instead
+    if 'log' in file_json:
+        logging.basicConfig(filename=file_json['log'], level=logging.INFO)
+    else:
+        logging.basciConfig(filename='probe.log', level=logging.INFO)
     return file_json
 
 parser = argparse.ArgumentParser(description = 'Client for sending monitoring data to central server')
